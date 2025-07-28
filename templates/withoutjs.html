@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InvestIQ Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    header {
+      background-color: #1e2a38;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .container {
+      max-width: 960px;
+      margin: auto;
+    }
+    .card {
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>InvestIQ Web App</h1>
+    <p>Real-Time Insights into Bonds, Forex & Stocks</p>
+  </header>
+
+  <div class="container">
+    <form action="/get-bonds" method="POST" class="card">
+      <div class="card-body">
+        <h5 class="card-title">Bond Market Data</h5>
+        <input name="bondType" class="form-control mb-2" placeholder="Enter bond type (e.g. CB, SGB)" required />
+        <button class="btn btn-primary" type="submit">Fetch Bonds</button>
+      </div>
+    </form>
+
+    <form action="/get-forex" method="POST" class="card">
+      <div class="card-body">
+        <h5 class="card-title">Forex Exchange Rates</h5>
+        <button class="btn btn-success" type="submit">Fetch Forex</button>
+      </div>
+    </form>
+
+    <form action="/get-stocks" method="POST" class="card">
+      <div class="card-body">
+        <h5 class="card-title">Stock Quotes</h5>
+        <input name="stockSymbols" class="form-control mb-2" placeholder="Enter stock symbols (e.g. AAPL,MSFT)" required />
+        <button class="btn btn-warning" type="submit">Fetch Stocks</button>
+      </div>
+    </form>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Results</h5>
+        <div id="results">
+          <!-- Server-rendered results go here -->
+          {{ results|safe }}
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

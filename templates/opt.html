@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InvestIQ Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    header {
+      background-color: #1e2a38;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .container {
+      max-width: 960px;
+      margin: auto;
+    }
+    .card {
+      margin-bottom: 1.5rem;
+    }
+    pre {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>InvestIQ Web App</h1>
+    <p>Real-Time Insights into Bonds, Forex & Stocks</p>
+  </header>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Bond Market Data</h5>
+        <input id="bondType" class="form-control mb-2" placeholder="Enter bond type (e.g. CB, SGB)" />
+        <button class="btn btn-primary" onclick="fetchBonds()">Fetch Bonds</button>
+        <div id="bondsResult" class="mt-3"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Forex Exchange Rates</h5>
+        <button class="btn btn-success" onclick="fetchForex()">Fetch Forex</button>
+        <div id="forexResult" class="mt-3"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Stock Quotes</h5>
+        <input id="stockSymbols" class="form-control mb-2" placeholder="Enter stock symbols (e.g. AAPL,MSFT)" />
+        <button class="btn btn-warning" onclick="fetchStocks()">Fetch Stocks</button>
+        <div id="stocksResult" class="mt-3"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function fetchBonds() {
+      const bondType = document.getElementById('bondType').value;
+      const url = `https://bonds-ncd-fixed-income.p.rapidapi.com/Type?type=${bondType}`;
+      const headers = {
+        "x-rapidapi-key": "43625a4603msh454f7c59f68e2bcp1f121ajsnf4a07cc7cb2e",
+        "x-rapidapi-host": "bonds-ncd-fixed-income.p.rapidapi.com"
+      };
+      try {
+        const res = await fetch(url, { headers });
+        const data = await res.json();
+        let html = `<table class="table table-bordered"><thead><tr><th>ID</th><th>ISIN</th><th>Expiry</th><th>Collateral</th><th>Type</th></tr></thead><tbody>`;
+        data.slice(0, 10).forEach(b => {
+          html += `<tr><td>${b.id}</td><td>${b.ISIN}</td><td>${b.Expiry_Date}</td><td>${b.Collateral}</td><td>${b.Type}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        document.getElementById('bondsResult').innerHTML = html;
+      } catch (e) {
+        document.getElementById('bondsResult').innerText = 'Error fetching bonds.';
+      }
+    }
+
+    async function fetchForex() {
+      const url = "https://financialmodelingprep.com/stable/forex-list?apikey=ffGB6E4grRvEsZSnfmtNzbkJzbP2aQCt";
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        let html = `<table class="table table-striped"><thead><tr><th>Symbol</th><th>From</th><th>To</th><th>From Name</th><th>To Name</th></tr></thead><tbody>`;
+        data.slice(0, 10).forEach(f => {
+          html += `<tr><td>${f.symbol}</td><td>${f.fromCurrency}</td><td>${f.toCurrency}</td><td>${f.fromName}</td><td>${f.toName}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        document.getElementById('forexResult').innerHTML = html;
+      } catch (e) {
+        document.getElementById('forexResult').innerText = 'Error fetching forex rates.';
+      }
+    }
+
+    async function fetchStocks() {
+      const symbols = document.getElementById('stockSymbols').value;
+      const url = `https://financialmodelingprep.com/stable/market-capitalization?symbol=${symbols}&apikey=ffGB6E4grRvEsZSnfmtNzbkJzbP2aQCt`;
+      try {
+        const res = await fetch(url);
+        const data = await res.json();
+        let html = `<table class="table table-hover"><thead><tr><th>Symbol</th><th>Date</th><th>Market Cap</th></tr></thead><tbody>`;
+        data.forEach(s => {
+          html += `<tr><td>${s.symbol}</td><td>${s.date}</td><td>${s.marketCap}</td></tr>`;
+        });
+        html += '</tbody></table>';
+        document.getElementById('stocksResult').innerHTML = html;
+      } catch (e) {
+        document.getElementById('stocksResult').innerText = 'Error fetching stocks.';
+      }
+    }
+  </script>
+</body>
+</html>
