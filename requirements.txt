@@ -1,3 +1,5 @@
 requests
 python-dotenv
 tabulate
+Flask
+flask_caching

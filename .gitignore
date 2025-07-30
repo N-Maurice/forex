@@ -1,5 +1,6 @@
 # ignore venv folder
 venv/
+.venv/
 
 # ignore Python bytecode files
 *.pyc

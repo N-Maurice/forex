@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InvestIQ Data Display</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f6f9;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    header {
+      background: #283e4a;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .section h2 {
+      color: #283e4a;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      background-color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    th, td {
+      padding: 12px 15px;
+      border: 1px solid #ddd;
+      text-align: left;
+    }
+
+    th {
+      background-color: #eaeef3;
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #888;
+      font-size: 14px;
+    }
+
+    .back-btn {
+      margin-top: 30px;
+      display: inline-block;
+      padding: 10px 15px;
+      background-color: #283e4a;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>InvestIQ | Financial Intelligence Dashboard</h1>
+    <p>Live data insights from Financial Modeling Prep and other sources</p>
+  </header>
+
+  {% if bonds %}
+  <div class="section">
+    <h2>Government Bonds</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Issuer</th>
+          <th>Bond Name</th>
+          <th>Yield (%)</th>
+          <th>Maturity Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for bond in bonds %}
+        <tr>
+          <td>{{ bond.issuer_name }}</td>
+          <td>{{ bond.name }}</td>
+          <td>{{ bond.yield }}</td>
+          <td>{{ bond.date }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% if forex %}
+  <div class="section">
+    <h2>Forex Exchange Rates</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Currency Pair</th>
+          <th>Rate</th>
+          <th>Last Updated</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for fx in forex %}
+        <tr>
+          <td>{{ fx.pair }}</td>
+          <td>{{ fx.rate }}</td>
+          <td>{{ fx.timestamp }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% if todos %}
+  <div class="section">
+    <h2>Employee To-Do List (JSONPlaceholder)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Task</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in todos %}
+        <tr>
+          <td>{{ task.employee }}</td>
+          <td>{{ task.title }}</td>
+          <td>{{ "Completed Successfully!" if task.completed else "Pending..." }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  <a class="back-btn" href="/">← Back to Dashboard</a>
+
+  <div class="footer">
+    &copy; 2025 InvestIQ | All rights reserved.
+  </div>
+
+</body>
+</html>
