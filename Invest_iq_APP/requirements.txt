@@ -3,3 +3,4 @@ python-dotenv
 tabulate
 Flask
 flask_caching
+redis

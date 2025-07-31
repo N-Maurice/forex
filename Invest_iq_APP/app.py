@@ -10,7 +10,12 @@ app = Flask(__name__)
 load_dotenv("FMP_API_KEY.env")
 
 # Cache config — store in memory for 24 hours
-app.config['CACHE_TYPE'] = 'SimpleCache'
+#app.config['CACHE_TYPE'] = 'SimpleCache'
+
+app.config['CACHE_TYPE'] = 'RedisCache'
+app.config['CACHE_REDIS_HOST'] = 'redis'
+app.config['CACHE_REDIS_PORT'] = 6379
+
 app.config['CACHE_DEFAULT_TIMEOUT'] = 86400
 cache = Cache(app)
 
@@ -43,7 +48,7 @@ def get_bonds():
             try:
                 bonds = response.json()
                 if isinstance(bonds, list):
-                    for b in bonds[:100]:  # Limit to 50 bonds
+                    for b in bonds[:100]:  # Limit to 100 bonds
                         data.append({
                             "issuer_name": b.get("Issuer_Name", "Unknown"),
                             "name": b.get("ISIN", "Unknown"),
@@ -119,4 +124,4 @@ def get_stocks():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
