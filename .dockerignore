@@ -1,0 +1,14 @@
+# ignore all .env files
+*.env
+
+# ignore all .log files
+*.log
+
+# ignore all temporary files
+*.tmp
+
+# ignore all backup files
+*.bak
+
+# ignore all cache directories
+cache/

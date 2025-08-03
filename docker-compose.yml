@@ -1,60 +1,59 @@
-version: "3.9"
+version: '3.8'
 
 services:
-  web-01:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: web-01
-    hostname: web-01
-    networks:
-      investiq_net:
-        ipv4_address: 172.20.0.11
+  redis:
+    image: redis:latest
+    restart: unless-stopped
     ports:
-      - "8081:8080"  # expose for local test access
-    environment:
-      - FLASK_ENV=development
-      - PORT=8080
+      - "6379:6379"
     volumes:
-      - ./templates:/app/templates  # mount templates directory
-      - ./static:/app/static        # mount static if used
+      - redis-data:/data
+    networks:
+      - forex_backend
 
-  web-02:
+  web01:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: web-02
-    hostname: web-02
+    restart: unless-stopped
+    depends_on:
+      - redis
+    env_file:
+      - FMI_API_KEY.env
+    ports:
+      - "8081:8080"
     networks:
-      investiq_net:
-        ipv4_address: 172.20.0.12
+      - forex_backend
+
+  web02:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - redis
+    env_file:
+      - FMI_API_KEY.env
     ports:
       - "8082:8080"
-    environment:
-      - FLASK_ENV=development
-      - PORT=8080
-    volumes:
-      - ./templates:/app/templates
-      - ./static:/app/static
-
-  lb-01:
-    image: haproxy:alpine
-    container_name: lb-01
-    hostname: lb-01
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-    depends_on:
-      - web-01
-      - web-02
     networks:
-      investiq_net:
-        ipv4_address: 172.20.0.10
+      - forex_backend
+
+  haproxy:
+    image: haproxy:2.8
+    restart: unless-stopped
+    depends_on:
+      - web01
+      - web02
+    ports:
+      - "80:80"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    networks:
+      - forex_backend
+
+volumes:
+  redis-data:
 
 networks:
-  investiq_net:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/24
+  forex_backend:
