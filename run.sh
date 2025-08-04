@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 sudo docker-compose down
 

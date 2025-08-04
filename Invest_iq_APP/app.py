@@ -15,7 +15,8 @@ load_dotenv("FMP_API_KEY.env")
 app.config['CACHE_TYPE'] = 'RedisCache'
 app.config['CACHE_REDIS_HOST'] = 'redis'
 app.config['CACHE_REDIS_PORT'] = 6379
-
+app.config['CACHE_REDIS_DB'] = 0
+app.config['CACHE_REDIS_URL'] = 'redis://redis:6379/0'
 app.config['CACHE_DEFAULT_TIMEOUT'] = 86400
 cache = Cache(app)
 
@@ -23,8 +24,12 @@ FMP_API_KEY = os.getenv("FMP_API_KEY")
 RAPID_API_KEY = os.getenv("RAPID_API_KEY")
 RAPID_API_HOST = os.getenv("RAPID_API_HOST")
 
-
 @app.route("/", methods=["GET"])
+@app.route("/home", methods=["GET"])
+def home():
+    return render_template("UI_v1.html")
+
+@app.route("/api", methods=["GET"])
 def index():
     return render_template("index.html")
 
