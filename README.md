@@ -200,12 +200,17 @@ You should see responses alternating between `web01` and `web02`.
 * Load balancing setup: configuring HAProxy for cookie-based sticky sessions.
 * Debugging internal server errors related to Redis resolution.
 
+## NB: 
+If you see a sample image like the one shown, it simply means someone else is using the API—no error at our end.
+![alt text](image.png)
+
 ---
 
 ## Demo
 
 A short demo video is included in the repo showing:
 
+* URL Demo Link: https://youtu.be/iDW215NPcYc
 * Local testing
 * Docker Compose setup
 * Load-balanced responses via HAProxy
@@ -216,6 +221,4 @@ A short demo video is included in the repo showing:
 
 This project is for educational use only. All rights reserved by the authors.
 
----
 
-Let me know if you want a more **deployment-production** ready setup (e.g., Gunicorn + Nginx, Docker Secrets, CI/CD tips).

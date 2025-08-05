@@ -66,7 +66,7 @@
     <form action="/get-bonds" method="POST" class="card">
       <div class="card-body">
         <h5 class="card-title">Bond Market Data</h5>
-        <input name="bondType" class="form-control mb-2" placeholder="Enter bond type (e.g. CB, SGB)" required />
+        <input name="bondType" class="form-control mb-2" placeholder="Enter bond type (e.g. CB, SGB, GS, Tbill, MF, ETF)" required />
         <button class="btn btn-primary" type="submit">Fetch Bonds</button>
       </div>
     </form>
@@ -80,7 +80,7 @@
 
     <form action="/get-stocks" method="POST" class="card">
       <div class="card-body">
-        <h5 class="card-title">Stock Quotes</h5>
+        <h5 class="card-title">Stock Market</h5>
         <input name="stockSymbols" class="form-control mb-2" placeholder="Enter stock symbols (e.g. AAPL,MSFT)" required />
         <button class="btn btn-warning" type="submit">Fetch Stocks</button>
       </div>

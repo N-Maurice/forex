@@ -7,7 +7,7 @@ import requests
 from dotenv import load_dotenv
 
 app = Flask(__name__)
-load_dotenv("FMI_API_KEY.env")
+load_dotenv("FMP_API_KEY.env")
 
 # Cache config — store in memory for 24 hours
 #app.config['CACHE_TYPE'] = 'SimpleCache'
@@ -23,17 +23,13 @@ FMP_API_KEY = os.getenv("FMP_API_KEY")
 RAPID_API_KEY = os.getenv("RAPID_API_KEY")
 RAPID_API_HOST = os.getenv("RAPID_API_HOST")
 
-@app.route("/", methods=["GET"])
-@app.route("/home", methods=["GET"])
-def home():
-    return render_template("UI_v1.html")
 
-@app.route("/api", methods=["GET"])
+@app.route("/", methods=["GET"])
 def index():
     return render_template("index.html")
 
 
-@app.route("/get-bonds", methods=["GET", "POST"])
+@app.route("/get-bonds", methods=["POST"])
 def get_bonds():
     bond_type = request.form.get("bondType", "").upper()
     cache_key = f"bonds_{bond_type}"
@@ -66,14 +62,14 @@ def get_bonds():
     return render_template("display.html", bonds=data, forex=[], todos=[])
 
 
-@app.route("/get-forex", methods=["GET", "POST"])
+@app.route("/get-forex", methods=["POST"])
 def get_forex():
     cache_key = "forex_data"
     data = cache.get(cache_key)
 
     if data is None:
         url = f"https://financialmodelingprep.com/api/v3/forex?apikey={FMP_API_KEY}"
-        response = requests.get(url, timeout=20)
+        response = requests.get(url, timeout=10)
         data = []
 
         if response.status_code == 200:
@@ -100,7 +96,7 @@ def get_forex():
     return render_template("display.html", bonds=[], forex=data, todos=[])
 
 
-@app.route("/get-stocks", methods=["GET", "POST"])
+@app.route("/get-stocks", methods=["POST"])
 def get_stocks():
     cache_key = "stock_todos"
     todos = cache.get(cache_key)
